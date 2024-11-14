@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './graphql_server'
+require_relative 'graphql_server'
 
 # type Review @key(fields: "id") {
 #   id: ID!

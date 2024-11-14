@@ -17,7 +17,7 @@ module ApolloFederation
       end
 
       # Pass on the default args:
-      super(*args, **kwargs, &block)
+      super
     end
 
     private

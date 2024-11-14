@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './graphql_server'
+require_relative 'graphql_server'
 
 # extend type Product @key(fields: "upc") {
 #   upc: String! @external

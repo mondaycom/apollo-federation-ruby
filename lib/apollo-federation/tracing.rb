@@ -4,7 +4,7 @@ module ApolloFederation
   module Tracing
     HEADER_NAME = 'HTTP_APOLLO_FEDERATION_INCLUDE_TRACE'
     KEY = :ftv1
-    DEBUG_KEY = "#{KEY}_debug".to_sym
+    DEBUG_KEY = :"#{KEY}_debug"
 
     module_function
 
@@ -18,8 +18,8 @@ module ApolloFederation
 
     # @deprecated There is no need to call this method. Traces are added to the result automatically
     def attach_trace_to_result(_result)
-      warn '[DEPRECATION] `attach_trace_to_result` is deprecated. There is no need to call it, as '\
-        'traces are added to the result automatically'
+      warn '[DEPRECATION] `attach_trace_to_result` is deprecated. There is no need to call it, as ' \
+           'traces are added to the result automatically'
     end
   end
 end
