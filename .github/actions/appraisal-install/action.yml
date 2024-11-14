@@ -9,7 +9,7 @@ runs:
   steps:
     - name: Copy lockfile
       shell: bash
-      run: bundle exec ${{ inputs.appraisal }} "cp $BUNDLE_GEMFILE.lock current_appraisal.gemfile.lock"
+      run: bundle exec appraisal ${{ inputs.appraisal }} "cp \$BUNDLE_GEMFILE.lock current_appraisal.gemfile.lock"
     - name: Appraisal package cache
       uses: actions/cache@v4
       with:
