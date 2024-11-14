@@ -39,7 +39,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - uses: ./.github/actions/appraisal-install
+      - name: Run appraisal install
+        uses: ./.github/actions/appraisal-install
         with:
           appraisal: ${{ matrix.appraisal }}
       - run: bundle config list
@@ -68,7 +69,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - uses: ./.github/actions/appraisal-install
+      - name: Run appraisal install
+        uses: ./.github/actions/appraisal-install
         with:
           appraisal: ${{ matrix.appraisal }}
       - name: Run install
