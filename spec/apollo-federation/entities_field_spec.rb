@@ -22,6 +22,7 @@ RSpec.describe ApolloFederation::EntitiesField do
     context 'when a type with the key directive doesn\'t exist' do
       it 'does not add the _entities field' do
         schema = Class.new(base_schema) do
+          # empty
         end
 
         expect(schema.to_definition).to match_sdl(
@@ -211,7 +212,7 @@ RSpec.describe ApolloFederation::EntitiesField do
           context 'when representations is empty' do
             let(:representations) { [] }
 
-            it { is_expected.to match_array [] }
+            it { is_expected.to contain_exactly [] }
             it { expect(errors).to be_nil }
           end
 
@@ -253,7 +254,7 @@ RSpec.describe ApolloFederation::EntitiesField do
               end
 
               context 'when the type does not define a resolve_reference method' do
-                it { is_expected.to match_array [{ 'id' => id.to_s, 'otherField' => nil }] }
+                it { is_expected.to contain_exactly [{ 'id' => id.to_s, 'otherField' => nil }] }
                 it { expect(errors).to be_nil }
               end
 
@@ -278,11 +279,12 @@ RSpec.describe ApolloFederation::EntitiesField do
                 end
 
                 it {
-                  expect(subject).to match_array [
+                  expect(subject).to contain_exactly [
                     { 'id' => id_1.to_s, 'otherField' => 'data!' },
                     { 'id' => id_2.to_s, 'otherField' => 'data2!' },
                   ]
                 }
+
                 it { expect(errors).to be_nil }
 
                 context 'when resolve_references returns a lazy object' do
@@ -311,11 +313,12 @@ RSpec.describe ApolloFederation::EntitiesField do
                   end
 
                   it {
-                    expect(subject).to match_array [
+                    expect(subject).to contain_exactly [
                       { 'id' => id_1.to_s, 'otherField' => 'data!' },
                       { 'id' => id_2.to_s, 'otherField' => 'data2!' },
                     ]
                   }
+
                   it { expect(errors).to be_nil }
                 end
 
@@ -428,7 +431,7 @@ RSpec.describe ApolloFederation::EntitiesField do
                   end
                 end
 
-                it { is_expected.to match_array [{ 'id' => id.to_s, 'otherField' => 'data!' }] }
+                it { is_expected.to contain_exactly [{ 'id' => id.to_s, 'otherField' => 'data!' }] }
                 it { expect(errors).to be_nil }
 
                 context 'when resolve_reference returns a lazy object' do
@@ -457,7 +460,7 @@ RSpec.describe ApolloFederation::EntitiesField do
                     end
                   end
 
-                  it { is_expected.to match_array [{ 'id' => id.to_s, 'otherField' => 'data!' }] }
+                  it { is_expected.to contain_exactly [{ 'id' => id.to_s, 'otherField' => 'data!' }] }
                   it { expect(errors).to be_nil }
 
                   context 'when lazy object raises an error' do
@@ -539,7 +542,7 @@ RSpec.describe ApolloFederation::EntitiesField do
                     end
                   end
 
-                  it { is_expected.to match_array [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
+                  it { is_expected.to contain_exactly [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
                   it { expect(errors).to be_nil }
                 end
 
@@ -558,7 +561,7 @@ RSpec.describe ApolloFederation::EntitiesField do
                     end
                   end
 
-                  it { is_expected.to match_array [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
+                  it { is_expected.to contain_exactly [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
                   it { expect(errors).to be_nil }
                 end
 
@@ -580,7 +583,7 @@ RSpec.describe ApolloFederation::EntitiesField do
                     end
                   end
 
-                  it { is_expected.to match_array [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
+                  it { is_expected.to contain_exactly [{ 'myId' => id.to_s, 'otherField' => 'data!' }] }
                   it { expect(errors).to be_nil }
                 end
               end

@@ -22,13 +22,14 @@ Gem::Specification.new do |spec|
     'changelog_uri' => 'https://github.com/Gusto/apollo-federation-ruby/releases',
     'source_code_uri' => 'https://github.com/Gusto/apollo-federation-ruby',
     'bug_tracker_uri' => 'https://github.com/Gusto/apollo-federation-ruby/issues',
+    'rubygems_mfa_required' => 'true',
   }
 
   spec.files = `git ls-files bin lib *.md LICENSE`.split("\n")
 
   spec.add_dependency 'graphql', '>= 1.10.14'
 
-  spec.add_runtime_dependency 'google-protobuf', '~> 3.22'
+  spec.add_dependency 'google-protobuf', '~> 3.22'
 
   spec.add_development_dependency 'actionpack'
   spec.add_development_dependency 'appraisal'

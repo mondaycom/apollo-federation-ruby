@@ -26,6 +26,7 @@ module ApolloFederation
       end
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def _entities(representations:)
       final_result = Array.new(representations.size)
       grouped_references_with_indices =
@@ -42,8 +43,8 @@ module ApolloFederation
         type = context.warden.get_type(typename)
         if type.nil? || type.kind != GraphQL::TypeKinds::OBJECT
           # TODO: Raise a specific error class?
-          raise "The _entities resolver tried to load an entity for type \"#{typename}\"," \
-                ' but no object type of that name was found in the schema'
+          raise "The _entities resolver tried to load an entity for type \"#{typename}\", " \
+                'but no object type of that name was found in the schema'
         end
 
         # TODO: What if the type is an interface?
@@ -85,6 +86,7 @@ module ApolloFederation
         final_result
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     private
 
