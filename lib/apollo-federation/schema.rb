@@ -55,12 +55,6 @@ module ApolloFederation
         federation_query_object
       end
 
-      private
-
-      def original_query
-        @orig_query_object || find_inherited_value(:original_query)
-      end
-
       def compose_directives
         @compose_directives || find_inherited_value(:compose_directives, [])
       end
@@ -77,6 +71,12 @@ module ApolloFederation
         }
         default_link[:as] = default_link_namespace if default_link_namespace != DEFAULT_LINK_NAMESPACE
         [default_link, *links]
+      end
+
+      private
+
+      def original_query
+        @orig_query_object || find_inherited_value(:original_query)
       end
 
       def federation_2_prefix
