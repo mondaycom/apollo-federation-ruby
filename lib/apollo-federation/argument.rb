@@ -35,15 +35,15 @@ module ApolloFederation
 
       add_directive(name: 'inaccessible') if inaccessible
 
-      if cost
-        add_directive(
-          name: 'cost',
-          arguments: [
-            name: 'weight',
-            values: cost[:weight],
-          ],
-        )
-      end
+      return unless cost
+
+      add_directive(
+        name: 'cost',
+        arguments: [
+          name: 'weight',
+          values: cost[:weight] || 1,
+        ],
+      )
     end
   end
 end

@@ -93,7 +93,7 @@ module ApolloFederation
           name: 'cost',
           arguments: [
             name: 'weight',
-            values: cost[:weight],
+            values: cost[:weight] || 1,
           ],
         )
       end
