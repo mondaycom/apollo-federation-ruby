@@ -28,6 +28,16 @@ module ApolloFederation
           ],
         )
       end
+
+      def cost(weight:)
+        add_directive(
+          name: 'cost',
+          arguments: [
+            name: 'weight',
+            values: weight,
+          ],
+        )
+      end
     end
   end
 end

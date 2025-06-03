@@ -42,6 +42,16 @@ module ApolloFederation
         )
       end
 
+      def cost(weight:)
+        add_directive(
+          name: 'cost',
+          arguments: [
+            name: 'weight',
+            values: weight,
+          ],
+        )
+      end
+
       def key(fields:, camelize: true, resolvable: true)
         arguments = [
           name: 'fields',
