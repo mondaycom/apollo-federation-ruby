@@ -1,9 +1,3 @@
-# [Unreleased]
-
-### Features
-
-* add support for the `@listSize` directive
-
 # [3.11.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.10.0...v3.11.0) (2025-06-17)
 
 
