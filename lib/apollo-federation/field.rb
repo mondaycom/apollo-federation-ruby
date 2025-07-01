@@ -59,7 +59,9 @@ module ApolloFederation
       nil
     end
 
-    def add_v2_directives(shareable: nil, inaccessible: nil, override: nil, tags: [], policy: nil, cost: nil, list_size: nil, **_kwargs)
+    def add_v2_directives(
+      shareable: nil, inaccessible: nil, override: nil, tags: [], policy: nil, cost: nil, list_size: nil, **_kwargs
+    )
       [{ flag: shareable, name: 'shareable' }, { flag: inaccessible, name: 'inaccessible' }].each do |directive|
         add_directive(name: directive[:name]) if directive[:flag]
       end
@@ -122,7 +124,7 @@ module ApolloFederation
         if list_size.key?(:require_one_slicing_argument)
           arguments << {
             name: 'requireOneSlicingArgument',
-            values: list_size[:require_one_slicing_argument]
+            values: list_size[:require_one_slicing_argument],
           }
         end
       end
