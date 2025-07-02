@@ -152,7 +152,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends {
+          type Product @extends {
             upc: String!
           }
 
@@ -188,7 +188,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Position @federation__shareable {
+          type Position @shareable {
             x: Int!
             y: Int!
           }
@@ -793,15 +793,15 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Book implements Product @federation__extends @federation__key(fields: "upc") {
-            upc: String! @federation__external
+          type Book implements Product @extends @key(fields: "upc") {
+            upc: String! @external
           }
 
-          type Pen implements Product @federation__key(fields: "upc") {
+          type Pen implements Product @key(fields: "upc") {
             upc: String!
           }
 
-          interface Product @federation__key(fields: "upc") {
+          interface Product @key(fields: "upc") {
             upc: String!
           }
         GRAPHQL
@@ -1596,7 +1596,7 @@ RSpec.describe ApolloFederation::ServiceField do
             extend schema
               @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-            type Product @federation__key(fields: "upc") {
+            type Product @key(fields: "upc") {
               upc: String!
             }
 
@@ -1627,7 +1627,7 @@ RSpec.describe ApolloFederation::ServiceField do
             extend schema
               @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-            type Product @federation__key(fields: "upc") {
+            type Product @key(fields: "upc") {
               upc: String!
             }
           GRAPHQL
@@ -1655,7 +1655,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "upc") @federation__key(fields: "name") {
+          type Product @key(fields: "upc") @key(fields: "name") {
             name: String
             upc: String!
           }
@@ -1681,7 +1681,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "upc", resolvable: false) {
+          type Product @key(fields: "upc", resolvable: false) {
             upc: String!
           }
         GRAPHQL
@@ -1706,7 +1706,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "upc") {
+          type Product @key(fields: "upc") {
             upc: String!
           }
         GRAPHQL
@@ -1733,9 +1733,9 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends @federation__key(fields: "upc") {
+          type Product @extends @key(fields: "upc") {
             price: Int
-            upc: String! @federation__external
+            upc: String! @external
           }
         GRAPHQL
       )
@@ -1760,7 +1760,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "id") {
+          type Product @key(fields: "id") {
             id: ID!
             isStock: Boolean! @policy(policies: [["private"]])
           }
@@ -1787,7 +1787,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "id") {
+          type Product @key(fields: "id") {
             id: ID!
             isStock: Boolean! @cost(weight: 5)
           }
@@ -1814,7 +1814,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.9", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "id") {
+          type Product @key(fields: "id") {
             id: ID!
             reviews: [String!]! @listSize(assumedSize: 5)
           }
@@ -1841,7 +1841,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__interfaceObject @federation__key(fields: "id") {
+          type Product @interfaceObject @key(fields: "id") {
             id: ID!
           }
         GRAPHQL
@@ -1873,8 +1873,8 @@ RSpec.describe ApolloFederation::ServiceField do
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
           type Position {
-            x: Int! @federation__shareable
-            y: Int! @federation__shareable
+            x: Int! @shareable
+            y: Int! @shareable
           }
 
           type Query {
@@ -2180,9 +2180,9 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends @federation__key(fields: "id") {
+          type Product @extends @key(fields: "id") {
             id: ID!
-            isStock: Boolean! @federation__override(from: "Products")
+            isStock: Boolean! @override(from: "Products")
           }
         GRAPHQL
       )
@@ -2216,14 +2216,14 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends @federation__key(fields: "upc") {
+          type Product @extends @key(fields: "upc") {
             price: Int
-            upc: String! @federation__external
+            upc: String! @external
           }
 
-          type Review @federation__key(fields: "id") {
+          type Review @key(fields: "id") {
             id: ID!
-            product: Product @federation__provides(fields: "upc")
+            product: Product @provides(fields: "upc")
           }
         GRAPHQL
       )
@@ -2251,11 +2251,11 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends @federation__key(fields: "upc") {
-            price: Int @federation__external
-            shippingEstimate: Int @federation__requires(fields: "price weight")
-            upc: String! @federation__external
-            weight: Int @federation__external
+          type Product @extends @key(fields: "upc") {
+            price: Int @external
+            shippingEstimate: Int @requires(fields: "price weight")
+            upc: String! @external
+            weight: Int @external
           }
         GRAPHQL
       )
@@ -2280,7 +2280,7 @@ RSpec.describe ApolloFederation::ServiceField do
             extend schema
               @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-            type Product @federation__key(fields: "productId") {
+            type Product @key(fields: "productId") {
               productId: String!
             }
           GRAPHQL
@@ -2308,9 +2308,9 @@ RSpec.describe ApolloFederation::ServiceField do
             extend schema
               @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-            type Product @federation__extends @federation__key(fields: "product_id") {
-              options: [String!]! @federation__requires(fields: "my_id")
-              otherOptions: [String!]! @federation__requires(fields: "myId")
+            type Product @extends @key(fields: "product_id") {
+              options: [String!]! @requires(fields: "my_id")
+              otherOptions: [String!]! @requires(fields: "myId")
               product_id: String!
             }
           GRAPHQL
@@ -2341,8 +2341,8 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__extends @federation__key(fields: "upc") {
-            upc: String! @federation__external
+          type Product @extends @key(fields: "upc") {
+            upc: String! @external
           }
         GRAPHQL
       )
@@ -2369,7 +2369,7 @@ RSpec.describe ApolloFederation::ServiceField do
           extend schema
             @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@composeDirective", "@inaccessible", "@policy", "@tag", "@cost", "@listSize"])
 
-          type Product @federation__key(fields: "id") {
+          type Product @key(fields: "id") {
             id: ID!
           }
         GRAPHQL

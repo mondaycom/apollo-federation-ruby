@@ -1,3 +1,9 @@
+# [Unreleased]
+
+### Features
+
+* generate Federation SDL importing only directives actually used
+
 # [3.12.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.11.0...v3.12.0) (2025-07-01)
 
 
