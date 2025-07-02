@@ -7,8 +7,6 @@ require 'apollo-federation/federated_document_from_schema_definition'
 
 module ApolloFederation
   module Schema
-    IMPORTED_DIRECTIVES = ['composeDirective', 'inaccessible', 'policy', 'tag', 'cost', 'listSize'].freeze
-
     def self.included(klass)
       klass.extend(CommonMethods)
     end
@@ -35,7 +33,10 @@ module ApolloFederation
         document_from_schema = FederatedDocumentFromSchemaDefinition.new(self, context: context)
 
         output = GraphQL::Language::Printer.new.print(document_from_schema.document)
-        output.prepend(federation_2_prefix) if federation_2?
+        if federation_2?
+          used = document_from_schema.used_directives.to_a
+          output.prepend(federation_2_prefix(used_directives: used))
+        end
         output
       end
 
@@ -63,11 +64,13 @@ module ApolloFederation
         @links || find_inherited_value(:links, [])
       end
 
-      def all_links
-        imported_directives = IMPORTED_DIRECTIVES
+      def all_links(used_directives: [])
+        default_imports = %w[inaccessible policy tag cost listSize]
+        imported_directives = default_imports | used_directives
+        imported_directives << 'composeDirective' if compose_directives.any?
         default_link = {
           url: "https://specs.apollo.dev/federation/v#{federation_version}",
-          import: imported_directives,
+          import: imported_directives.uniq,
         }
         default_link[:as] = default_link_namespace if default_link_namespace != DEFAULT_LINK_NAMESPACE
         [default_link, *links]
@@ -79,10 +82,10 @@ module ApolloFederation
         @orig_query_object || find_inherited_value(:original_query)
       end
 
-      def federation_2_prefix
+      def federation_2_prefix(used_directives: [])
         schema = ['extend schema']
 
-        all_links.each do |link|
+        all_links(used_directives: used_directives).each do |link|
           link_str = '  @link('
           link_str += "url: \"#{link[:url]}\""
           link_str += ", as: \"#{link[:as]}\"" if link[:as]
