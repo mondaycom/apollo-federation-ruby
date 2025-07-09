@@ -1728,17 +1728,17 @@ RSpec.describe ApolloFederation::ServiceField do
         federation version: '2.6'
       end
 
-              expect(execute_sdl(schema)).to match_sdl(
-          <<~GRAPHQL,
-            extend schema
-              @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@external", "@extends", "@key"])
+      expect(execute_sdl(schema)).to match_sdl(
+        <<~GRAPHQL,
+          extend schema
+            @link(url: "https://specs.apollo.dev/federation/v2.6", import: ["@external", "@extends", "@key"])
 
-            type Product @extends @key(fields: "upc") {
-              price: Int
-              upc: String! @external
-            }
-          GRAPHQL
-        )
+          type Product @extends @key(fields: "upc") {
+            price: Int
+            upc: String! @external
+          }
+        GRAPHQL
+      )
     end
 
     it 'returns valid SDL for @policy directive' do

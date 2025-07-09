@@ -16,8 +16,6 @@ module ApolloFederation
       '_service',
     ].freeze
 
-
-
     attr_reader :used_directives
 
     def initialize(*args, **kwargs)

@@ -12,6 +12,12 @@ module ApolloFederation
     end
 
     module CommonMethods
+      # All federation directives that can be imported from Apollo Federation specs
+      FEDERATION_DIRECTIVES = %w[
+        external requires provides key shareable inaccessible override policy
+        cost listSize tag extends interfaceObject composeDirective
+      ].freeze
+
       def federation(version: '1.0', default_link_namespace: nil, links: [], compose_directives: [])
         @federation_version = version
         @default_link_namespace = default_link_namespace
@@ -63,19 +69,22 @@ module ApolloFederation
       end
 
       def all_links(used_directives: [])
+        # Filter used_directives to only include federation directives
+        federation_used_directives = used_directives.select { |directive| FEDERATION_DIRECTIVES.include?(directive) }
+
         # If custom namespace is provided, don't import any directives (use prefixed versions instead)
         if default_link_namespace
           imported_directives = []
         else
           # Collect all directives that should be imported
-          all_directives = used_directives
+          all_directives = federation_used_directives
           # Include @composeDirective when compose_directives are configured
           all_directives << 'composeDirective' if compose_directives.any?
-          
+
           # Remove duplicates while preserving order
           imported_directives = all_directives.uniq
         end
-        
+
         default_link = {
           url: "https://specs.apollo.dev/federation/v#{federation_version}",
           import: imported_directives,
