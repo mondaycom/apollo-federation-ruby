@@ -20,14 +20,14 @@ RSpec.describe ApolloFederation::ServiceField do
       base_field = Class.new(GraphQL::Schema::Field) do
         include ApolloFederation::Field
 
-        def initialize(*args, permission_scope: nil, camelize: false, skip_depth: false, **kwargs, &block)
+        def initialize(*args, permission_scope: nil, camelize: true, skip_depth: false, **kwargs, &block)
           @permission_scope = permission_scope
           @skip_depth = skip_depth
       
           super(*args, camelize: camelize, **kwargs, &block)
           resolver_class = kwargs[:resolver_class]
           
-          return unless resolver_class&.respond_to?(:apply_list_size_directive)
+          return unless resolver_class.respond_to?(:apply_list_size_directive)
           
           resolver_class.apply_list_size_directive(self)
         end
@@ -1840,7 +1840,7 @@ RSpec.describe ApolloFederation::ServiceField do
         extend ActiveSupport::Concern
     
         included do
-          argument :limit, Integer, "Number of items to get, the default is 60.", default_value: 60, required: false
+          argument :limit, Integer, 'Number of items to get, the default is 60.', default_value: 60, required: false
           argument :page, Integer, 'Page number to get, starting at 1.', default_value: 1, required: false
         end
     
