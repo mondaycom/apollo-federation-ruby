@@ -26,9 +26,10 @@ RSpec.describe ApolloFederation::ServiceField do
       
           super(*args, camelize: camelize, **kwargs, &block)
           resolver_class = kwargs[:resolver_class]
-          if resolver_class && resolver_class.respond_to?(:apply_list_size_directive)
-            resolver_class.apply_list_size_directive(self)
-          end
+          
+          return unless resolver_class && resolver_class.respond_to?(:apply_list_size_directive)
+          
+          resolver_class.apply_list_size_directive(self)
         end
       end
 
@@ -1839,13 +1840,13 @@ RSpec.describe ApolloFederation::ServiceField do
         extend ActiveSupport::Concern
     
         included do
-          argument :limit, Integer, "Number of items to get, the default is " + 60.to_s + ".", default_value: 60, required: false
-          argument :page, Integer, "Page number to get, starting at 1.", default_value: 1, required: false
+          argument :limit, Integer, "Number of items to get, the default is #{60}.", default_value: 60, required: false
+          argument :page, Integer, 'Page number to get, starting at 1.', default_value: 1, required: false
         end
     
         class_methods do
           def apply_list_size_directive(field)
-            field.add_list_size_directive({slicing_arguments: 'limit', require_one_slicing_argument: true})
+            field.add_list_size_directive({ slicing_arguments: 'limit', require_one_slicing_argument: true })
           end
         end
       end

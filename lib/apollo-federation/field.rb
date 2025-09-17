@@ -136,7 +136,6 @@ module ApolloFederation
       )
     end
 
-
     def add_tag_directive(tag)
       add_directive(
         name: 'tag',
