@@ -1846,7 +1846,7 @@ RSpec.describe ApolloFederation::ServiceField do
 
         class_methods do
           def apply_list_size_directive(field)
-            field.add_list_size_directive({ slicing_arguments: 'limit', require_one_slicing_argument: true })
+            field.add_list_size_directive({ slicing_arguments: ['limit'], require_one_slicing_argument: true })
           end
         end
       end
@@ -1891,7 +1891,7 @@ RSpec.describe ApolloFederation::ServiceField do
               Page number to get, starting at 1.
               """
               page: Int = 1
-            ): [String!]! @listSize(slicingArguments: "limit", requireOneSlicingArgument: true)
+            ): [String!]! @listSize(slicingArguments: ["limit"], requireOneSlicingArgument: true)
           }
         GRAPHQL
       )
