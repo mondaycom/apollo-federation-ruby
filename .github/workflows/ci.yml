@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      release-package:
+        description: 'Test release'
+        type: boolean
+        default: false
   pull_request:
 
 jobs:
@@ -83,11 +89,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [ ruby-lint, ruby-test, integration-tests ]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || ${{ inputs.release-package}}
     env:
       BUNDLE_APP_CONFIG: .bundle
       GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
