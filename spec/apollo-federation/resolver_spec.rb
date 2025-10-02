@@ -13,8 +13,9 @@ RSpec.describe ApolloFederation::Resolver do
       include ApolloFederation::Field
 
       def initialize(*args, **kwargs, &block)
+        resolver_class = kwargs[:resolver_class] || kwargs[:resolver]
+
         super(*args, **kwargs, &block)
-        resolver_class = kwargs[:resolver_class]
 
         return unless resolver_class.respond_to?(:apply_list_size_directive)
 
