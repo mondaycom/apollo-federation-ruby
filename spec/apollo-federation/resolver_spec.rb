@@ -31,30 +31,44 @@ RSpec.describe ApolloFederation::Resolver do
     end
   end
 
-  it 'adds list_size directive through resolver' do
-    test_resolver = Class.new(GraphQL::Schema::Resolver) do
-      include ApolloFederation::Resolver
+  context 'with list_size directive' do
+    let(:test_resolver) do
+      Class.new(GraphQL::Schema::Resolver) do
+        include ApolloFederation::Resolver
 
-      type [String], null: false
-      list_size slicing_arguments: [:limit], assumed_size: 100
+        type [String], null: false
+        list_size slicing_arguments: [:limit], assumed_size: 100
+      end
     end
 
-    product = Class.new(base_object) do
-      graphql_name 'Product'
-
-      field :items, resolver: test_resolver
+    let(:product) do
+      resolver = test_resolver
+      Class.new(base_object) do
+        graphql_name 'Product'
+        field :items, resolver: resolver
+      end
     end
 
-    # Get the field to check the directives
-    field = product.fields['items']
-    directives = field.federation_directives
+    let(:field) { product.fields['items'] }
+    let(:directives) { field.federation_directives }
 
-    expect(directives.length).to eq(1)
-    expect(directives.first[:name]).to eq('listSize')
+    it 'adds the directive' do
+      expect(directives.length).to eq(1)
+    end
 
-    arguments = directives.first[:arguments]
-    expect(arguments).to include(hash_including(name: 'slicingArguments', values: [:limit]))
-    expect(arguments).to include(hash_including(name: 'assumedSize', values: 100))
+    it 'sets the directive name to listSize' do
+      expect(directives.first[:name]).to eq('listSize')
+    end
+
+    it 'sets slicing_arguments' do
+      arguments = directives.first[:arguments]
+      expect(arguments).to include(hash_including(name: 'slicingArguments', values: [:limit]))
+    end
+
+    it 'sets assumed_size' do
+      arguments = directives.first[:arguments]
+      expect(arguments).to include(hash_including(name: 'assumedSize', values: 100))
+    end
   end
 
   it 'works without list_size directive' do
@@ -76,63 +90,96 @@ RSpec.describe ApolloFederation::Resolver do
     expect(directives).to be_empty
   end
 
-  it 'supports multiple list_size options' do
-    test_resolver = Class.new(GraphQL::Schema::Resolver) do
-      include ApolloFederation::Resolver
+  context 'with multiple list_size options' do
+    let(:test_resolver) do
+      Class.new(GraphQL::Schema::Resolver) do
+        include ApolloFederation::Resolver
 
-      type [String], null: false
-      list_size slicing_arguments: [:limit, :offset],
-                require_one_slicing_argument: false,
-                assumed_size: 50
+        type [String], null: false
+        list_size slicing_arguments: %i[limit offset],
+                  require_one_slicing_argument: false,
+                  assumed_size: 50
+      end
     end
 
-    product = Class.new(base_object) do
-      graphql_name 'Product'
-
-      field :items, resolver: test_resolver
+    let(:product) do
+      resolver = test_resolver
+      Class.new(base_object) do
+        graphql_name 'Product'
+        field :items, resolver: resolver
+      end
     end
 
-    field = product.fields['items']
-    directives = field.federation_directives
+    let(:field) { product.fields['items'] }
+    let(:directives) { field.federation_directives }
+    let(:arguments) { directives.first[:arguments] }
 
-    expect(directives.length).to eq(1)
-    expect(directives.first[:name]).to eq('listSize')
+    it 'adds the directive' do
+      expect(directives.length).to eq(1)
+    end
 
-    arguments = directives.first[:arguments]
-    expect(arguments).to include(hash_including(name: 'slicingArguments', values: [:limit, :offset]))
-    expect(arguments).to include(hash_including(name: 'requireOneSlicingArgument', values: false))
-    expect(arguments).to include(hash_including(name: 'assumedSize', values: 50))
+    it 'sets multiple slicing_arguments' do
+      expect(arguments).to include(hash_including(name: 'slicingArguments', values: %i[limit offset]))
+    end
+
+    it 'sets require_one_slicing_argument' do
+      expect(arguments).to include(hash_including(name: 'requireOneSlicingArgument', values: false))
+    end
+
+    it 'sets assumed_size' do
+      expect(arguments).to include(hash_including(name: 'assumedSize', values: 50))
+    end
   end
 
-  it 'generates correct SDL with list_size directive' do
-    base_schema = Class.new(GraphQL::Schema) do
-      include ApolloFederation::Schema
+  context 'when generating SDL' do
+    let(:base_schema) do
+      Class.new(GraphQL::Schema) do
+        include ApolloFederation::Schema
+      end
     end
 
-    test_resolver = Class.new(GraphQL::Schema::Resolver) do
-      include ApolloFederation::Resolver
+    let(:test_resolver) do
+      Class.new(GraphQL::Schema::Resolver) do
+        include ApolloFederation::Resolver
 
-      type [String], null: false
-      list_size slicing_arguments: [:limit], assumed_size: 100
+        type [String], null: false
+        list_size slicing_arguments: [:limit], assumed_size: 100
+      end
     end
 
-    product = Class.new(base_object) do
-      graphql_name 'Product'
-      key fields: :id
+    let(:product) do
+      resolver = test_resolver
+      base = base_object
+      Class.new(base) do
+        graphql_name 'Product'
+        key fields: :id
 
-      field :id, 'ID', null: false
-      field :items, resolver: test_resolver
+        field :id, 'ID', null: false
+        field :items, resolver: resolver
+      end
     end
 
-    schema = Class.new(base_schema) do
-      orphan_types product
-      federation version: '2.9'
+    let(:schema) do
+      prod = product
+      base = base_schema
+      Class.new(base) do
+        orphan_types prod
+        federation version: '2.9'
+      end
     end
 
-    sdl = schema.execute('{ _service { sdl } }')['data']['_service']['sdl']
+    let(:sdl) { schema.execute('{ _service { sdl } }')['data']['_service']['sdl'] }
 
-    expect(sdl).to include('@listSize')
-    expect(sdl).to include('slicingArguments: ["limit"]')
-    expect(sdl).to include('assumedSize: 100')
+    it 'includes @listSize directive' do
+      expect(sdl).to include('@listSize')
+    end
+
+    it 'includes slicing_arguments in SDL' do
+      expect(sdl).to include('slicingArguments: ["limit"]')
+    end
+
+    it 'includes assumed_size in SDL' do
+      expect(sdl).to include('assumedSize: 100')
+    end
   end
 end
