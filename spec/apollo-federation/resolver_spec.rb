@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'active_support/concern'
 require 'graphql'
 require 'apollo-federation/resolver'
 require 'apollo-federation/field'
@@ -13,9 +14,8 @@ RSpec.describe ApolloFederation::Resolver do
       include ApolloFederation::Field
 
       def initialize(*args, **kwargs, &block)
-        resolver_class = kwargs[:resolver_class] || kwargs[:resolver]
-
         super(*args, **kwargs, &block)
+        resolver_class = kwargs[:resolver_class]
 
         return unless resolver_class.respond_to?(:apply_list_size_directive)
 
@@ -132,55 +132,56 @@ RSpec.describe ApolloFederation::Resolver do
     end
   end
 
-  context 'when generating SDL' do
-    let(:base_schema) do
-      Class.new(GraphQL::Schema) do
+  it 'generates correct SDL with list_size directive' do # rubocop:disable RSpec/MultipleExpectations
+    pagination = Module.new do
+      extend ActiveSupport::Concern
+
+      included do
+        argument :limit, Integer, required: false, default_value: 10
+      end
+
+      class_methods do
+        def apply_list_size_directive(field)
+          field.add_list_size_directive({ slicing_arguments: ['limit'], assumed_size: 100 })
+        end
+      end
+    end
+
+    test_resolver = Class.new(GraphQL::Schema::Resolver) do
+      include pagination
+
+      type [String], null: false
+    end
+
+    product = Class.new(base_object) do
+      graphql_name 'Product'
+      key fields: :id
+
+      field :id, 'ID', null: false
+      field :items, resolver: test_resolver
+    end
+
+    if Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('1.12.0')
+      base_schema = Class.new(GraphQL::Schema) do
+        use GraphQL::Execution::Interpreter
+        use GraphQL::Analysis::AST
+        include ApolloFederation::Schema
+      end
+    else
+      base_schema = Class.new(GraphQL::Schema) do
         include ApolloFederation::Schema
       end
     end
 
-    let(:test_resolver) do
-      Class.new(GraphQL::Schema::Resolver) do
-        include ApolloFederation::Resolver
-
-        type [String], null: false
-        list_size slicing_arguments: [:limit], assumed_size: 100
-      end
+    schema = Class.new(base_schema) do
+      orphan_types product
+      federation version: '2.9'
     end
 
-    let(:product) do
-      resolver = test_resolver
-      base = base_object
-      Class.new(base) do
-        graphql_name 'Product'
-        key fields: :id
+    sdl = schema.execute('{ _service { sdl } }')['data']['_service']['sdl']
 
-        field :id, 'ID', null: false
-        field :items, resolver: resolver
-      end
-    end
-
-    let(:schema) do
-      prod = product
-      base = base_schema
-      Class.new(base) do
-        orphan_types prod
-        federation version: '2.9'
-      end
-    end
-
-    let(:sdl) { schema.execute('{ _service { sdl } }')['data']['_service']['sdl'] }
-
-    it 'includes @listSize directive' do
-      expect(sdl).to include('@listSize')
-    end
-
-    it 'includes slicing_arguments in SDL' do
-      expect(sdl).to include('slicingArguments: ["limit"]')
-    end
-
-    it 'includes assumed_size in SDL' do
-      expect(sdl).to include('assumedSize: 100')
-    end
+    expect(sdl).to include('@listSize')
+    expect(sdl).to include('slicingArguments: ["limit"]')
+    expect(sdl).to include('assumedSize: 100')
   end
 end
