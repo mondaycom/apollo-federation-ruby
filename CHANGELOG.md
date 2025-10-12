@@ -1,12 +1,23 @@
-# [3.13.1](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.13.0...v3.13.1) (2025-08-18)
+## [3.15.1](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.15.0...v3.15.1) (2025-10-02)
+
 
 ### Bug Fixes
 
-* **warden compatibility**: Fix GraphQL-Ruby 2.x compatibility by replacing warden usage with backward-compatible methods ([#PR-TBD](https://github.com/mondaycom/apollo-federation-ruby/issues/PR-TBD))
-  - Fixed `undefined local variable or method 'warden'` error in GraphQL Ruby 2.x
-  - Added backward-compatible `fields_for_type` and `root_type_for_operation` methods
-  - Updated `entities_field.rb` to use schema.types when warden is not available
-  - Maintains full compatibility with both GraphQL Ruby 1.x and 2.x
+* Apollo Federated Tracing (ftv1) with Apollo Router ([#19](https://github.com/mondaycom/apollo-federation-ruby/issues/19)) ([6c86b04](https://github.com/mondaycom/apollo-federation-ruby/commit/6c86b041540e8465cd2a677a168c69f0aaa11811))
+
+# [3.15.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.14.0...v3.15.0) (2025-10-02)
+
+
+### Features
+
+* introduce Resolver module with list_size method ([#18](https://github.com/mondaycom/apollo-federation-ruby/issues/18)) ([af4c7ec](https://github.com/mondaycom/apollo-federation-ruby/commit/af4c7ec6906aa59cad2dc946353673fd51a98e5e))
+
+# [3.14.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.13.0...v3.14.0) (2025-09-30)
+
+
+### Features
+
+* Enable list size directive registration from resolvers ([#16](https://github.com/mondaycom/apollo-federation-ruby/issues/16)) ([5df69bf](https://github.com/mondaycom/apollo-federation-ruby/commit/5df69bf145e1cde9d0a100b01223071ee09ec854))
 
 # [3.13.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.12.0...v3.13.0) (2025-07-09)
 
