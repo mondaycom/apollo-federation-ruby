@@ -129,7 +129,9 @@ module ApolloFederation
         types_schema = Class.new(self)
         # Add the original query objects to the types. We have to use orphan_types here to avoid
         # infinite recursion
-        types_schema.orphan_types(original_query)
+        if original_query
+          add_type_to_schema(types_schema, original_query)
+        end
 
         # Walk through all of the types and determine which ones are entities (any type with a
         # "key" directive)
@@ -138,6 +140,29 @@ module ApolloFederation
           type.include?(ApolloFederation::Object) &&
             type.federation_directives&.any? { |directive| directive[:name] == 'key' }
         end
+      end
+
+      # Helper method to add types to schema in a version-compatible way
+      # GraphQL 2.5+ requires object types use orphan_types, non-object types use extra_types
+      def add_type_to_schema(schema, *types)
+        if graphql_version_supports_extra_types?
+          types.each do |type|
+            if type.is_a?(Class) && type < GraphQL::Schema::Object
+              schema.orphan_types(type)
+            else
+              # For non-object types in GraphQL 2.5+, we don't need to add them
+              # as they'll be discovered through the object types that reference them
+            end
+          end
+        else
+          # GraphQL < 2.5 accepts all types in orphan_types
+          schema.orphan_types(*types)
+        end
+      end
+
+      # Check if we're running GraphQL 2.5+ which has extra_types
+      def graphql_version_supports_extra_types?
+        Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.5.0')
       end
 
       def federation_query(query_obj)
