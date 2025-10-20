@@ -4,4 +4,5 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'graphql', '~> 2.0.0'
+# graphql 2.4+ required for Ruby 3.4 support
+gem 'graphql', '~> 2.4'

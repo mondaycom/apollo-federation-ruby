@@ -7,7 +7,7 @@
   * Add `debug` and `rackup` as development dependencies
   * Remove `appraisal` gem and simplify testing approach
   * Update CI to test against Ruby 3.2, 3.3, and 3.4
-  * Remove version constraint on `graphql` dependency
+  * Update development dependency to use `graphql ~> 2.4` (supports Ruby 3.4 and backward compatible with 2.0+)
 
 ## [3.15.1](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.15.0...v3.15.1) (2025-10-02)
 
