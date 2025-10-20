@@ -630,9 +630,13 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # Interface is auto-discovered through implements relationship
-        # Only pass the implementing objects to orphan_types
-        orphan_types book
+        # GraphQL 2.0-2.3: Both types must be in orphan_types (no auto-discovery for interfaces)
+        # GraphQL 2.3+: Interfaces are auto-discovered, only pass implementing objects
+        if Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.3.0')
+          orphan_types book, product
+        else
+          orphan_types book
+        end
         federation version: '2.6'
       end
 
@@ -684,9 +688,13 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # Interface is auto-discovered through implements relationship
-        # Only pass the implementing objects to orphan_types
-        orphan_types book
+        # GraphQL 2.0-2.3: Both types must be in orphan_types (no auto-discovery for interfaces)
+        # GraphQL 2.3+: Interfaces are auto-discovered, only pass implementing objects
+        if Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.3.0')
+          orphan_types book, product
+        else
+          orphan_types book
+        end
         federation version: '2.6'
       end
 
@@ -738,9 +746,13 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # Interface is auto-discovered through implements relationship
-        # Only pass the implementing objects to orphan_types
-        orphan_types book
+        # GraphQL 2.0-2.3: Both types must be in orphan_types (no auto-discovery for interfaces)
+        # GraphQL 2.3+: Interfaces are auto-discovered, only pass implementing objects
+        if Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.3.0')
+          orphan_types book, product
+        else
+          orphan_types book
+        end
         federation version: '2.6'
       end
 
