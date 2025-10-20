@@ -9,4 +9,3 @@ end
 appraise 'graphql-2.2' do
   gem 'graphql', '~> 2.2.14'
 end
-
