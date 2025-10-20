@@ -47,6 +47,9 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
+      - name: Configure bundler to allow Gemfile.lock updates
+        run: bundle config set --local frozen false
+
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.graphql }} bundle install
 
@@ -73,6 +76,9 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
+      - name: Configure bundler to allow Gemfile.lock updates
+        run: bundle config set --local frozen false
 
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.graphql }} bundle install
