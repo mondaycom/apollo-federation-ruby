@@ -630,12 +630,15 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # GraphQL 2.0-2.2 requires both types in orphan_types
-        # GraphQL 2.3+ can use extra_types for interfaces
+        # GraphQL 2.2+ auto-discovers interfaces through implements
+        # GraphQL 2.0-2.1 needs explicit orphan_types for both
+        # GraphQL 2.3+ uses extra_types for interfaces
         if Gem::Version.new(GraphQL::VERSION) > Gem::Version.new('2.3.0')
           extra_types book, product
+        elsif Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0')
+          orphan_types book  # Interface auto-discovered
         else
-          orphan_types book, product
+          orphan_types book, product  # 2.0-2.1 needs both
         end
         federation version: '2.6'
       end
@@ -688,12 +691,15 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # GraphQL 2.0-2.2 requires both types in orphan_types
-        # GraphQL 2.3+ can use extra_types for interfaces
+        # GraphQL 2.2+ auto-discovers interfaces through implements
+        # GraphQL 2.0-2.1 needs explicit orphan_types for both
+        # GraphQL 2.3+ uses extra_types for interfaces
         if Gem::Version.new(GraphQL::VERSION) > Gem::Version.new('2.3.0')
           extra_types book, product
+        elsif Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0')
+          orphan_types book  # Interface auto-discovered
         else
-          orphan_types book, product
+          orphan_types book, product  # 2.0-2.1 needs both
         end
         federation version: '2.6'
       end
@@ -746,12 +752,15 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        # GraphQL 2.0-2.2 requires both types in orphan_types
-        # GraphQL 2.3+ can use extra_types for interfaces
+        # GraphQL 2.2+ auto-discovers interfaces through implements
+        # GraphQL 2.0-2.1 needs explicit orphan_types for both
+        # GraphQL 2.3+ uses extra_types for interfaces
         if Gem::Version.new(GraphQL::VERSION) > Gem::Version.new('2.3.0')
           extra_types book, product
+        elsif Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0')
+          orphan_types book  # Interface auto-discovered
         else
-          orphan_types book, product
+          orphan_types book, product  # 2.0-2.1 needs both
         end
         federation version: '2.6'
       end
