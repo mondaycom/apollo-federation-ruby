@@ -375,7 +375,7 @@ RSpec.describe ApolloFederation::Tracing do
         expect(traced_data).to match(
           hash_including(
             start_time: { seconds: expected_trace_start_time },
-            end_time: { seconds: expected_trace_start_time + 2 },
+            end_time: { seconds: expected_end_time },
             duration_ns: be > 0,
             root: hash_including(
               child: [hash_including(
@@ -439,7 +439,7 @@ RSpec.describe ApolloFederation::Tracing do
         expect(traced_data).to match(
           hash_including(
             start_time: { seconds: expected_trace_start_time },
-            end_time: { seconds: expected_trace_start_time + 2 },
+            end_time: { seconds: expected_end_time },
             duration_ns: 9,
             root: hash_including(
               child: [
@@ -632,7 +632,7 @@ RSpec.describe ApolloFederation::Tracing do
           expect(traced_data).to match(
             hash_including(
               start_time: { seconds: expected_trace_start_time },
-              end_time: { seconds: expected_trace_start_time + 2 },
+              end_time: { seconds: expected_end_time },
               duration_ns: 2,
               root: hash_including(
                 error: [hash_including(expected_captured_error)],
@@ -647,7 +647,7 @@ RSpec.describe ApolloFederation::Tracing do
           expect(trace('{ nonExistant }')).to eq(
             ApolloFederation::Tracing::Trace.new(
               start_time: { seconds: expected_trace_start_time },
-              end_time: { seconds: expected_trace_start_time + 2 },
+              end_time: { seconds: expected_end_time },
               duration_ns: 2,
               root: {
                 error: [{
