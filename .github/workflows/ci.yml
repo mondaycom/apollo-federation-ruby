@@ -45,12 +45,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
 
-      - name: Configure bundler to allow Gemfile.lock updates
-        run: |
-          bundle config unset deployment
-          bundle config set --local frozen false
+      - name: Install base dependencies
+        run: bundle install
 
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.graphql }} bundle install
@@ -77,12 +75,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
 
-      - name: Configure bundler to allow Gemfile.lock updates
-        run: |
-          bundle config unset deployment
-          bundle config set --local frozen false
+      - name: Install base dependencies
+        run: bundle install
 
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.graphql }} bundle install
