@@ -30,32 +30,6 @@ module ApolloFederation
         Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.5.0')
       end
 
-      # Override orphan_types to handle GraphQL 2.5+ API changes
-      # In GraphQL 2.5+, only object types can be added as orphan_types
-      # Other types (unions, enums, interfaces) are auto-discovered or should use extra_types
-      def orphan_types(*types)
-        if graphql_version_supports_extra_types?
-          object_types = []
-          non_object_types = []
-          
-          types.each do |type|
-            if type.is_a?(Class) && type < GraphQL::Schema::Object
-              object_types << type
-            else
-              non_object_types << type
-            end
-          end
-          
-          super(*object_types) if object_types.any?
-          
-          # Non-object types don't need to be explicitly added in GraphQL 2.5+
-          # They're auto-discovered through the object types that reference them
-        else
-          # GraphQL < 2.5 accepts all types in orphan_types
-          super(*types)
-        end
-      end
-
       def federation_version
         @federation_version || find_inherited_value(:federation_version, '1.0')
       end
