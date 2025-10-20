@@ -293,16 +293,14 @@ RSpec.describe ApolloFederation::Tracing do
         expect(trace('{ arrayOfLazyScalars }')).to eq ApolloFederation::Tracing::Trace.new(
           start_time: { seconds: 1_564_920_001, nanos: 0 },
           end_time: { seconds: 1_564_920_002, nanos: 0 },
-          # The old runtime and the interpreter handle arrays of lazy objects differently.
-          # The old runtime doesn't trigger the `execute_field_lazy` tracer event, so we have to
-          # use the (inaccurate) end times from the `execute_field` event.
-          duration_ns: schema.interpreter? ? 5 : 3,
+          # In graphql 2.4+, all schemas use the interpreter runtime
+          duration_ns: 5,
           root: {
             child: [{
               response_name: 'arrayOfLazyScalars',
               type: '[String!]!',
               start_time: 1,
-              end_time: schema.interpreter? ? 4 : 2,
+              end_time: 4,
               parent_type: 'Query',
             }],
           },
@@ -330,13 +328,14 @@ RSpec.describe ApolloFederation::Tracing do
         expect(trace('{ lazyArrayOfLazyScalars }')).to eq ApolloFederation::Tracing::Trace.new(
           start_time: { seconds: 1_564_920_001, nanos: 0 },
           end_time: { seconds: 1_564_920_002, nanos: 0 },
-          duration_ns: schema.interpreter? ? 6 : 4,
+          # In graphql 2.4+, all schemas use the interpreter runtime
+          duration_ns: 6,
           root: {
             child: [{
               response_name: 'lazyArrayOfLazyScalars',
               type: '[String!]!',
               start_time: 1,
-              end_time: schema.interpreter? ? 5 : 3,
+              end_time: 5,
               parent_type: 'Query',
             }],
           },
@@ -347,13 +346,14 @@ RSpec.describe ApolloFederation::Tracing do
         expect(trace('{ arrayOfLazyObjects { id } }')).to eq ApolloFederation::Tracing::Trace.new(
           start_time: { seconds: 1_564_920_001, nanos: 0 },
           end_time: { seconds: 1_564_920_002, nanos: 0 },
-          duration_ns: schema.interpreter? ? 9 : 7,
+          # In graphql 2.4+, all schemas use the interpreter runtime
+          duration_ns: 9,
           root: {
             child: [{
               response_name: 'arrayOfLazyObjects',
               type: '[Item!]!',
               start_time: 1,
-              end_time: schema.interpreter? ? 6 : 2,
+              end_time: 6,
               parent_type: 'Query',
               child: [
                 {
@@ -361,8 +361,8 @@ RSpec.describe ApolloFederation::Tracing do
                   child: [{
                     response_name: 'id',
                     type: 'String!',
-                    start_time: schema.interpreter? ? 4 : 3,
-                    end_time: schema.interpreter? ? 5 : 4,
+                    start_time: 4,
+                    end_time: 5,
                     parent_type: 'Item',
                   }],
                 },
@@ -371,8 +371,8 @@ RSpec.describe ApolloFederation::Tracing do
                   child: [{
                     response_name: 'id',
                     type: 'String!',
-                    start_time: schema.interpreter? ? 7 : 5,
-                    end_time: schema.interpreter? ? 8 : 6,
+                    start_time: 7,
+                    end_time: 8,
                     parent_type: 'Item',
                   }],
                 },
@@ -426,7 +426,8 @@ RSpec.describe ApolloFederation::Tracing do
         expect(trace(query)).to eq ApolloFederation::Tracing::Trace.new(
           start_time: { seconds: 1_564_920_001, nanos: 0 },
           end_time: { seconds: 1_564_920_002, nanos: 0 },
-          duration_ns: schema.interpreter? ? 11 : 9,
+          # In graphql 2.4+, all schemas use the interpreter runtime
+          duration_ns: 11,
           root: {
             child: [{
               response_name: 'lazyScalar',
@@ -438,7 +439,7 @@ RSpec.describe ApolloFederation::Tracing do
               response_name: 'arrayOfLazyScalars',
               type: '[String!]!',
               start_time: 3,
-              end_time: schema.interpreter? ? 10 : 4,
+              end_time: 10,
               parent_type: 'Query',
             }, {
               response_name: 'lazyArrayOfScalars',

@@ -841,7 +841,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types book, product
+        orphan_types book
+        extra_types product
         federation version: '2.6'
       end
 
@@ -879,7 +880,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types book, product
+        orphan_types book
+        extra_types product
         federation version: '2.6'
       end
 
@@ -917,7 +919,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types product_type, product
+        orphan_types product
+        extra_types product_type
         federation version: '2.6'
       end
 
@@ -954,7 +957,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types product_type, product
+        orphan_types product
+        extra_types product_type
         federation version: '2.6'
       end
 
@@ -991,7 +995,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types product_type, product
+        orphan_types product
+        extra_types product_type
         federation version: '2.6'
       end
 
@@ -1028,7 +1033,8 @@ RSpec.describe ApolloFederation::ServiceField do
       end
 
       schema = Class.new(base_schema) do
-        orphan_types product_type, product
+        orphan_types product
+        extra_types product_type
         federation version: '2.6'
       end
 
