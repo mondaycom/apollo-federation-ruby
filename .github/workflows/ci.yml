@@ -24,10 +24,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: false
-
-      - name: Install dependencies
-        run: bundle install --force
+          bundler-cache: true
 
       - name: Run RuboCop
         run: bundle exec rubocop
@@ -50,14 +47,19 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
 
+      - name: Configure bundler
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+
       - name: Install base dependencies
-        run: bundle install --force
+        run: bundle install
 
       - name: Generate appraisal gemfiles
         run: bundle exec appraisal generate
 
       - name: Install appraisal dependencies
-        run: bundle exec appraisal ${{ matrix.graphql }} bundle install --force
+        run: bundle exec appraisal ${{ matrix.graphql }} bundle install
 
       - name: Show bundle config
         run: bundle exec appraisal ${{ matrix.graphql }} bundle config list
@@ -83,14 +85,19 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
 
+      - name: Configure bundler
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+
       - name: Install base dependencies
-        run: bundle install --force
+        run: bundle install
 
       - name: Generate appraisal gemfiles
         run: bundle exec appraisal generate
 
       - name: Install appraisal dependencies
-        run: bundle exec appraisal ${{ matrix.graphql }} bundle install --force
+        run: bundle exec appraisal ${{ matrix.graphql }} bundle install
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
