@@ -24,7 +24,15 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Configure bundler
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+
+      - name: Install dependencies
+        run: bundle install
 
       - name: Run RuboCop
         run: bundle exec rubocop
