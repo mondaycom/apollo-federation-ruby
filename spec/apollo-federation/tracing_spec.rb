@@ -9,8 +9,14 @@ RSpec.describe ApolloFederation::Tracing do
 
     let(:expected_end_time) do
       # After our fix to record_trace_end_time in execute_multiplex (for graphql-ruby 2.5.12+),
-      # all versions now make an extra Time.now call, so end_time is always 1564920003
-      1_564_920_003
+      # all versions now make an extra Time.now call, so end_time is always 1564920003.
+      # GraphQL 2.2-2.3 makes one additional Time.now call compared to 2.0, resulting in 1564920004
+      if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0') &&
+         Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.4.0')
+        1_564_920_004
+      else
+        1_564_920_003
+      end
     end
 
     # configure clocks to increment by 1 for each call
@@ -603,7 +609,8 @@ RSpec.describe ApolloFederation::Tracing do
         it 'properly captures the error' do
           traced_data = trace('{ items { id, name }').to_h
 
-          if Gem::Version.new(GraphQL::VERSION) > Gem::Version.new('2.3.0')
+          # GraphQL 2.2+ changed the parser error message format
+          if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0')
             expected_captured_error = {
               message: 'Expected NAME, actual: (none) ("") at [1, 20]',
               location: [{ line: 1, column: 20 }],
