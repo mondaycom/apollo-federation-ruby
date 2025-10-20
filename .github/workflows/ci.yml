@@ -27,7 +27,7 @@ jobs:
           bundler-cache: false
 
       - name: Install dependencies
-        run: bundle install
+        run: bundle install --force
 
       - name: Run RuboCop
         run: bundle exec rubocop
@@ -51,13 +51,13 @@ jobs:
           bundler-cache: false
 
       - name: Install base dependencies
-        run: bundle install
+        run: bundle install --force
 
       - name: Generate appraisal gemfiles
         run: bundle exec appraisal generate
 
       - name: Install appraisal dependencies
-        run: bundle exec appraisal ${{ matrix.graphql }} bundle install
+        run: bundle exec appraisal ${{ matrix.graphql }} bundle install --force
 
       - name: Show bundle config
         run: bundle exec appraisal ${{ matrix.graphql }} bundle config list
@@ -84,13 +84,13 @@ jobs:
           bundler-cache: false
 
       - name: Install base dependencies
-        run: bundle install
+        run: bundle install --force
 
       - name: Generate appraisal gemfiles
         run: bundle exec appraisal generate
 
       - name: Install appraisal dependencies
-        run: bundle exec appraisal ${{ matrix.graphql }} bundle install
+        run: bundle exec appraisal ${{ matrix.graphql }} bundle install --force
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
