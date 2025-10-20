@@ -25,37 +25,6 @@ module ApolloFederation
         @compose_directives = compose_directives
       end
 
-      # Check if we're running GraphQL 2.3+ which changed orphan_types to only accept objects
-      def graphql_version_restricts_orphan_types?
-        Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.3.0')
-      end
-
-      # Override orphan_types to handle GraphQL 2.3+ API changes
-      # In GraphQL 2.3+, only object types can be added as orphan_types
-      # Other types (unions, enums, interfaces) should use extra_types or are auto-discovered
-      def orphan_types(*types)
-        return super if types.empty?
-        
-        if graphql_version_restricts_orphan_types?
-          object_types = []
-          non_object_types = []
-          
-          types.flatten.each do |type|
-            if type.is_a?(Class) && type < GraphQL::Schema::Object
-              object_types << type
-            else
-              non_object_types << type
-            end
-          end
-          
-          super(*object_types) if object_types.any?
-          extra_types(*non_object_types) if non_object_types.any?
-        else
-          # GraphQL < 2.3 accepts all types in orphan_types
-          super(*types)
-        end
-      end
-
       def federation_version
         @federation_version || find_inherited_value(:federation_version, '1.0')
       end
