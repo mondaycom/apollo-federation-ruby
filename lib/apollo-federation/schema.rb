@@ -34,7 +34,15 @@ module ApolloFederation
       end
 
       def federation_sdl(context: nil)
-        document_from_schema = FederatedDocumentFromSchemaDefinition.new(self, context: context)
+        # For graphql-ruby < 2.3.0, orphan types aren't auto-discovered with the warden
+        # When context is passed, warden filters types based on reachability from Query
+        # For Fed SDL, we need all types, so we skip passing context for older versions
+        if Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.3.0') && !context.nil?
+          # Generate SDL without context to include all orphan types
+          document_from_schema = FederatedDocumentFromSchemaDefinition.new(self)
+        else
+          document_from_schema = FederatedDocumentFromSchemaDefinition.new(self, context: context)
+        end
 
         output = GraphQL::Language::Printer.new.print(document_from_schema.document)
         if federation_2?
