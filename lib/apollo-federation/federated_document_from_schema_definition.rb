@@ -75,17 +75,6 @@ module ApolloFederation
     end
 
     def build_type_definition_nodes(types)
-      # For graphql-ruby < 2.3.0, the warden may filter out orphan types
-      # Get all schema types directly to ensure orphan types are included
-      if use_warden? && !types.empty?
-        all_types = @schema.types.values.flatten
-        types = all_types.select do |type|
-          type.is_a?(Class) &&
-            !type.introspection? &&
-            (type.kind.object? || type.kind.interface? || type.kind.union? || type.kind.enum? || type.kind.scalar? || type.kind.input_object?)
-        end
-      end
-      
       non_federation_types = types.select do |type|
         if query_type?(type)
           !fields_for_type(type).all? { |field| FEDERATION_QUERY_FIELDS.include?(field.graphql_name) }
