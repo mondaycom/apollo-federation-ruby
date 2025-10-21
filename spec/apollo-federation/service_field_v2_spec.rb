@@ -944,7 +944,7 @@ RSpec.describe ApolloFederation::ServiceField do
 
       schema = Class.new(base_schema) do
         if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.3.0')
-          extra_types product_type, product
+          extra_types product_type
         else
           orphan_types product_type, product
         end
@@ -985,7 +985,7 @@ RSpec.describe ApolloFederation::ServiceField do
 
       schema = Class.new(base_schema) do
         if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.3.0')
-          extra_types product_type, product
+          extra_types product_type
         else
           orphan_types product_type, product
         end
@@ -1026,7 +1026,7 @@ RSpec.describe ApolloFederation::ServiceField do
 
       schema = Class.new(base_schema) do
         if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.3.0')
-          extra_types product_type, product
+          extra_types product_type
         else
           orphan_types product_type, product
         end
@@ -1067,7 +1067,7 @@ RSpec.describe ApolloFederation::ServiceField do
 
       schema = Class.new(base_schema) do
         if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.3.0')
-          extra_types product_type, product
+          extra_types product_type
         else
           orphan_types product_type, product
         end
