@@ -630,13 +630,12 @@ RSpec.describe ApolloFederation::Tracing do
           end
 
           # Parsing errors happen early and don't get the extra Time.now call in GraphQL 2.2+
-          parsing_end_time =
-            if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0') &&
-               Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.4.0')
-              expected_trace_start_time + 2
-            else
-              expected_end_time
-            end
+          if Gem::Version.new(GraphQL::VERSION) >= Gem::Version.new('2.2.0') &&
+             Gem::Version.new(GraphQL::VERSION) < Gem::Version.new('2.4.0')
+            parsing_end_time = expected_trace_start_time + 2
+          else
+            parsing_end_time = expected_end_time
+          end
 
           expect(traced_data).to match(
             hash_including(
