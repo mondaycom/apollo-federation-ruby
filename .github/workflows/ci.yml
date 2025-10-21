@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 env:
   BUNDLE_APP_CONFIG: .bundle
@@ -68,9 +68,6 @@ jobs:
 
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.graphql }} bundle install
-
-      - name: Show bundle config
-        run: bundle exec appraisal ${{ matrix.graphql }} bundle config list
 
       - name: Run RSpec
         run: bundle exec appraisal ${{ matrix.graphql }} rspec
@@ -139,7 +136,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.4'
           bundler-cache: true
 
       - name: Configure bundler for semantic-release
