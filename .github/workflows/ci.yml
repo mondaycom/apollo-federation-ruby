@@ -43,8 +43,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.2', '3.3', '3.4']
-        graphql: ['graphql-2.0.19', 'graphql-3']
+        ruby: ['3.4']
+        graphql: ['graphql-2.0.19', 'graphql-2.3']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.2', '3.3', '3.4']
+        ruby: ['3.4']
         graphql: ['graphql-2.0.19', 'graphql-2.3']
     steps:
       - name: Checkout code
@@ -124,7 +124,6 @@ jobs:
 
   release:
     name: Release
-    environment: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
