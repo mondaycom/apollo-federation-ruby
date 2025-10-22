@@ -26,6 +26,10 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
 
+      - name: Install compatible bundler for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: gem install bundler -v '~> 2.3.0'
+
       - name: Configure bundler
         run: |
           bundle config set --local path 'vendor/bundle'
@@ -54,6 +58,10 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
+
+      - name: Install compatible bundler for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: gem install bundler -v '~> 2.3.0'
 
       - name: Configure bundler
         run: |
@@ -89,6 +97,10 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
+
+      - name: Install compatible bundler for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: gem install bundler -v '~> 2.3.0'
 
       - name: Configure bundler
         run: |
