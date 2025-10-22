@@ -28,9 +28,14 @@ jobs:
 
       - name: Install compatible bundler for Ruby 2.7
         if: matrix.ruby == '2.7'
-        run: gem install bundler -v '~> 2.3.0'
+        run: |
+          gem install bundler -v '~> 2.3.0'
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+          bundle update --bundler
 
       - name: Configure bundler
+        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
@@ -61,9 +66,14 @@ jobs:
 
       - name: Install compatible bundler for Ruby 2.7
         if: matrix.ruby == '2.7'
-        run: gem install bundler -v '~> 2.3.0'
+        run: |
+          gem install bundler -v '~> 2.3.0'
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+          bundle update --bundler
 
       - name: Configure bundler
+        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
@@ -100,9 +110,14 @@ jobs:
 
       - name: Install compatible bundler for Ruby 2.7
         if: matrix.ruby == '2.7'
-        run: gem install bundler -v '~> 2.3.0'
+        run: |
+          gem install bundler -v '~> 2.3.0'
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local frozen false
+          bundle update --bundler
 
       - name: Configure bundler
+        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
