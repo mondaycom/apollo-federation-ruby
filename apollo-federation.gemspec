@@ -42,11 +42,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webrick'
 
   # Ruby 3.0+ only dependencies
-  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.0.0')
+  if Gem.ruby_version >= Gem::Version.new('3.0.0')
     spec.add_development_dependency 'debug'
     spec.add_development_dependency 'rackup'
     # Ruby 3.4+ requires explicit mutex_m and ostruct
-    spec.add_development_dependency 'mutex_m' if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.4.0')
-    spec.add_development_dependency 'ostruct' if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.4.0')
+    spec.add_development_dependency 'mutex_m' if Gem.ruby_version >= Gem::Version.new('3.4.0')
+    spec.add_development_dependency 'ostruct' if Gem.ruby_version >= Gem::Version.new('3.4.0')
   end
 end
