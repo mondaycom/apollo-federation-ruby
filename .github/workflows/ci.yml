@@ -25,20 +25,16 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
-
-      - name: Install compatible bundler for Ruby 2.7
-        if: matrix.ruby == '2.7'
-        run: |
-          gem install bundler -v '~> 2.3.0'
-          bundle config set --local path 'vendor/bundle'
-          bundle config set --local frozen false
-          bundle update --bundler
+          bundler: ${{ matrix.ruby == '2.7' && '2.3' || 'default' }}
 
       - name: Configure bundler
-        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
+
+      - name: Update bundler in lockfile for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: bundle update --bundler
 
       - name: Install dependencies
         run: bundle install
@@ -63,20 +59,16 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
-
-      - name: Install compatible bundler for Ruby 2.7
-        if: matrix.ruby == '2.7'
-        run: |
-          gem install bundler -v '~> 2.3.0'
-          bundle config set --local path 'vendor/bundle'
-          bundle config set --local frozen false
-          bundle update --bundler
+          bundler: ${{ matrix.ruby == '2.7' && '2.3' || 'default' }}
 
       - name: Configure bundler
-        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
+
+      - name: Update bundler in lockfile for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: bundle update --bundler
 
       - name: Install base dependencies
         run: bundle install
@@ -107,20 +99,16 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: false
-
-      - name: Install compatible bundler for Ruby 2.7
-        if: matrix.ruby == '2.7'
-        run: |
-          gem install bundler -v '~> 2.3.0'
-          bundle config set --local path 'vendor/bundle'
-          bundle config set --local frozen false
-          bundle update --bundler
+          bundler: ${{ matrix.ruby == '2.7' && '2.3' || 'default' }}
 
       - name: Configure bundler
-        if: matrix.ruby != '2.7'
         run: |
           bundle config set --local path 'vendor/bundle'
           bundle config set --local frozen false
+
+      - name: Update bundler in lockfile for Ruby 2.7
+        if: matrix.ruby == '2.7'
+        run: bundle update --bundler
 
       - name: Install base dependencies
         run: bundle install
