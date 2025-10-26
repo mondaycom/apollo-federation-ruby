@@ -1,3 +1,13 @@
+# [3.16.0](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.15.1...v3.16.0) (2025-10-26)
+
+
+### Features
+
+* Add support for Rails 8, Ruby 3, and latest GraphQL gem ([#21](https://github.com/mondaycom/apollo-federation-ruby/issues/21)) ([10b1dac](https://github.com/mondaycom/apollo-federation-ruby/commit/10b1dacac6fdaf2990a5a9bbe11ef0fd71def00a))
+* improve README formatting for installation instructions ([#25](https://github.com/mondaycom/apollo-federation-ruby/issues/25)) ([874e497](https://github.com/mondaycom/apollo-federation-ruby/commit/874e49773f58b7c81473f75feb1c7e87ee410ee4))
+* publish new version ([#24](https://github.com/mondaycom/apollo-federation-ruby/issues/24)) ([b4bbd19](https://github.com/mondaycom/apollo-federation-ruby/commit/b4bbd192cafc99def1b8d2bbb0cae334ccb76e1a))
+* revert GEM_HOST_API_KEY secret name for semantic-release ([#26](https://github.com/mondaycom/apollo-federation-ruby/issues/26)) ([0fbfc10](https://github.com/mondaycom/apollo-federation-ruby/commit/0fbfc10d4e57e00b6db7cf64feaf48c95a7d184f))
+
 ## [3.15.1](https://github.com/mondaycom/apollo-federation-ruby/compare/v3.15.0...v3.15.1) (2025-10-02)
 
 
